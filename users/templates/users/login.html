@@ -1,0 +1,13 @@
+{% extends "core/base.html" %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col text-center">
+      <a href="{% url 'social:begin' 'github' %}" id="github-button" class="btn btn-social btn-github">
+          <i class="fa fa-github"></i> Sign in with Github
+        </a>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

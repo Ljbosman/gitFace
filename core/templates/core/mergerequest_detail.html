@@ -1,0 +1,52 @@
+{% extends "core/base.html" %}
+{% block content %}
+{% if user == object.author and object.status == 'Open' %}
+    <article class="media content-section">
+      <div class="media-body">
+        <div class="article-metadata">
+          <a class="mr-2">Author: {{ object.author }}</a>
+          <a class="float-right">Date Opened: {{ object.date_opened|date:"F d, Y" }}</a>
+        </div>
+        <h2 class="article-title">Merge {{ object.source_branch }} of {{ object.repo }} into {{ object.target_branch }}?</h2>
+          {% if object.status == "Open" %}
+            <a>Status: <p class="pr-open">{{ object.status }}</p></a>
+          {% elif object.status == "Merged" %}
+            <a>Status: <p class="pr-merged">{{ object.status }}</p></a><br>
+          {% else %}
+            <a>Status: <p class="pr-closed">{{ object.status }}</p></a><br>
+          {% endif %}
+          <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div  class="text-center">
+                        <a class="btn btn-success btn-lg mt-1 mb-1" href="{% url 'merge-request-merge' object.id %}">Merge</a>
+                        <a class="btn btn-danger btn-lg mt-1 mb-1" href="{% url 'merge-request-delete' object.id %}">Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </article>
+{% else %}
+  <article class="media content-section">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2">{{ object.author }}</a>
+      </div>
+      <h2><a class="article-title">{{ object.title }}</a></h2>
+        <a>Repo: {{ pr.repo }}</a><br>
+        <a>Source Branch: {{ object.source_branch }}</a><br>
+        <a>Target Branch: {{ object.target_branch }}</a><br>
+        <a>Request Assignee: {{ object.target_email }}</a><br>
+        <a>Date Opened: {{ object.date_opened|date:"F d, Y" }}</a><br><br>
+        {% if object.status == "Open" %}
+          <a>Status: <p class="pr-open">{{ object.status }}</p></a><br>
+        {% elif object.status == "Merged" %}
+          <a>Status: <p class="pr-merged">{{ object.status }}</p></a><br>
+        {% else %}
+          <a>Status: <p class="pr-closed">{{ object.status }}</p></a><br>
+        {% endif %}
+    </div>
+  </article>
+{% endif %}
+{% endblock content %}
