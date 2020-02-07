@@ -81,9 +81,9 @@ def merge_request_merge(request, pk):
     base = repo.get_branch(merge_request.target_branch)
     head = repo.get_branch(merge_request.source_branch)
 
-    merge_to_master = repo.merge(base, head.commit.sha, "Merge from {} into {} approved by {}".format(
-        head,
-        base,
+    merge_to_master = repo.merge(base.name, head.commit.sha, "Merge from {} into {} approved by {}".format(
+        head.name,
+        base.name,
         request.user.username
     ))
     merge_request.status = 'Merged'
