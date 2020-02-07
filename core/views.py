@@ -88,6 +88,7 @@ def merge_request_merge(request, pk):
     ))
     merge_request.status = 'Merged'
     merge_request.save()
+
     return redirect('core-requests')
 
 
