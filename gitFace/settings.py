@@ -141,4 +141,5 @@ LOGIN_URL = 'login'
 # Security lol
 SOCIAL_AUTH_GITHUB_KEY = 'd32df29b248966f05849'
 SOCIAL_AUTH_GITHUB_SECRET = '687dad9a612cc87401d64f04686a24d0dd5530f3'
+SOCIAL_AUTH_GITHUB_SCOPE = ['repo']
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

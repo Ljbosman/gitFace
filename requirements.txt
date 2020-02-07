@@ -1,0 +1,5 @@
+django-crispy-forms
+social-auth-app-django
+gitpython
+pygithub
+django-formtools
