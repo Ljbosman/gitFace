@@ -1,0 +1,66 @@
+{% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+  <h2>Merge Request Form</h2>
+
+  <form method="post" id="mergerequestForm" data-repos-url="{% url 'ajax_load_repos' %}" data-branches-url="{% url 'ajax_load_branches' %}" novalidate>
+    {% csrf_token %}
+    <table>
+      {{ form | crispy }}
+    </table>
+    <button type="submit">Save</button>
+    <a href="{% url 'core-requests' %}">Nevermind</a>
+  </form>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script>
+    $("#id_title").change(function () {
+      var url = $("#mergerequestForm").attr("data-repos-url");  // get the url of the `load_repos` view
+
+      $.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request (= localhost:8000/core/ajax/load-repos/)
+        data: {
+        },
+        success: function (data) {   // `data` is the return of the `load_cities` view function
+          $("#id_repo").html(data);  // replace the contents of the city input with the data that came from the server
+        }
+      });
+
+    });
+
+    $("#id_repo").change(function () {
+      var url = $("#mergerequestForm").attr("data-branches-url");  // get the url of the `load_branches` view
+      var repoId = $(this).val();  // get the selected country ID from the HTML input
+      $.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request (= localhost:8000/core/ajax/load-branches/)
+        data: {
+          'repo': repoId,       // add the country id to the GET parameters
+          'source': 1,
+        },
+        success: function (data) {   // `data` is the return of the `load_branches` view function
+          $("#id_source_branch").html(data);  // replace the contents of the source_branch input with the data that came from the server
+        }
+      });
+
+    });
+
+    $("#id_source_branch").change(function () {
+      var url = $("#mergerequestForm").attr("data-branches-url");  // get the url of the `load_branches` view
+      var repoId = $("#id_repo").val();  // get the selected country ID from the HTML input
+      $.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request (= localhost:8000/core/ajax/load-branches/)
+        data: {
+          'repo': repoId,       // add the country id to the GET parameters
+          'source_branch': $("#id_source_branch").val()
+        },
+        success: function (data) {   // `data` is the return of the `load_branches` view function
+          $("#id_target_branch").html(data);  // replace the contents of the target_branch input with the data that came from the server
+        }
+      });
+
+    });
+  </script>
+
+{% endblock %}

@@ -1,2 +1,2 @@
 # gitFace
-git interface 
+git interface using pygithub

@@ -1,0 +1,88 @@
+{% extends "core/base.html" %}
+{% block content %}
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+      <div class="dropdown">
+        <select class="selectpicker">
+            <option selected="selected">Choose</option>
+            <option value="outgoing">Outgoing</option>
+            <option value="incoming">Incoming</option>
+        </select>
+      </div>
+    <br>
+    <div class="outgoing section">
+        <h2>Outgoing</h2>
+        <hr>
+        {% for pr in merge_requests %}
+            {% if pr.author == user %}
+                    <article class="media content-section">
+                      <div class="media-body">
+                        <div class="article-metadata">
+                          <a class="mr-2">{{ pr.author }}</a>
+                        </div>
+                        <h2><a class="article-title" href="{% url 'merge-request-detail' pr.id %}" >{{ pr.title }}</a></h2>
+                          <a>Repo: {{ pr.repo }}</a><br>
+                          <a>Source Branch: {{ pr.source_branch }}</a><br>
+                          <a>Target Branch: {{ pr.target_branch }}</a><br>
+                          <a>Request Assignee: {{ pr.target_email }}</a><br>
+                          <a>Date Opened: {{ pr.date_opened|date:"F d, Y" }}</a><br><br>
+                          {% if pr.status == "Open" %}
+                            <a>Status: <p class="pr-open">{{ pr.status }}</p></a><br>
+                          {% elif pr.status == "Merged" %}
+                            <a>Status: <p class="pr-merged">{{ pr.status }}</p></a><br>
+                          {% else %}
+                            <a>Status: <p class="pr-closed">{{ pr.status }}</p></a><br>
+                          {% endif %}
+                      </div>
+                    </article>
+
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="incoming section">
+        <h2>Incoming</h2>
+        <hr>
+        {% for pr in merge_requests %}
+            {% if pr.target_email == user.email %}
+                    <article class="media content-section incoming">
+                      <div class="media-body">
+                        <div class="article-metadata">
+                          <a class="mr-2">{{ pr.author }}</a>
+                        </div>
+                        <h2><a class="article-title" href="{% url 'merge-request-detail' pr.id %}" >{{ pr.title }}</a></h2>
+                          <a>Repo: {{ pr.repo }}</a><br>
+                          <a>Source Branch: {{ pr.source_branch }}</a><br>
+                          <a>Target Branch: {{ pr.target_branch }}</a><br>
+                          <a>Request Assignee: {{ pr.target_email }}</a><br>
+                          <a>Date Opened: {{ pr.date_opened|date:"F d, Y" }}</a><br><br>
+                          {% if pr.status == "Open" %}
+                            <a>Status: <p class="pr-open">{{ pr.status }}</p></a><br>
+                          {% elif pr.status == "Merged" %}
+                            <a>Status: <p class="pr-merged">{{ pr.status }}</p></a><br>
+                          {% else %}
+                            <a>Status: <p class="pr-closed">{{ pr.status }}</p></a><br>
+                          {% endif %}
+                      </div>
+                    </article>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+<script>
+$(document).ready(function(){
+    $("select").change(function(){
+        $(this).find("option:selected").each(function(){
+            var optionValue = $(this).attr("value");
+            if(optionValue){
+                $(".section").not("." + optionValue).hide();
+                $("." + optionValue).show();
+            } else{
+                $(".section").hide();
+            }
+        });
+    });
+});
+</script>
+{% endblock content %}
+
+
